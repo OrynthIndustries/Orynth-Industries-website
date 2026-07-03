@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#000;color:#F4F4F5;font-family:Archivo,sans-serif;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:#F5A524;color:#000;}
+  @keyframes orynBlink{0%,100%{opacity:1}50%{opacity:0.2}}
+  @keyframes orynRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<div style="background:#000;color:#F4F4F5;font-family:Archivo,sans-serif;overflow-x:hidden;">
+
+  <!-- ===== NAV ===== -->
+  <header style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:18px 40px;background:linear-gradient(180deg,rgba(0,0,0,0.85),rgba(0,0,0,0));backdrop-filter:blur(2px);">
+    <a href="index.dc.html" style="display:flex;align-items:center;gap:11px;">
+      <svg viewBox="0 0 100 100" width="34" height="34" style="display:block;flex:none;">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#fff" stroke-width="4"/>
+        <circle cx="50" cy="50" r="29" fill="none" stroke="#fff" stroke-width="3"/>
+        <circle cx="50" cy="50" r="6.5" fill="#fff"/>
+        <line x1="50" y1="3" x2="50" y2="24" stroke="#fff" stroke-width="3"/>
+        <line x1="50" y1="76" x2="50" y2="97" stroke="#fff" stroke-width="3"/>
+        <line x1="3" y1="50" x2="24" y2="50" stroke="#fff" stroke-width="3"/>
+        <line x1="76" y1="50" x2="97" y2="50" stroke="#fff" stroke-width="3"/>
+      </svg>
+      <div style="line-height:1;">
+        <div style="font-weight:800;font-size:22px;letter-spacing:1.5px;">RYNTH</div>
+        <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.44em;color:#8A8A92;margin-top:3px;">INDUSTRIES</div>
+      </div>
+    </a>
+    <nav style="display:flex;align-items:center;gap:30px;">
+      <a href="#mission" style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.12em;color:#B7B7BE;" style-hover="color:#fff;">MISSION</a>
+      <a href="SneakPeek.dc.html" style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.12em;color:#F5A524;" style-hover="color:#ffb841;">SNEAK PEEK</a>
+      <a href="About.dc.html" style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.12em;color:#B7B7BE;" style-hover="color:#fff;">ABOUT</a>
+      <a href="Contact.dc.html" style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.12em;color:#B7B7BE;" style-hover="color:#fff;">CONTACT</a>
+      <a href="#support" style="display:inline-flex;align-items:center;gap:8px;background:#F5A524;color:#000;font-weight:700;font-size:13px;letter-spacing:0.04em;padding:11px 20px;border-radius:2px;" style-hover="background:#ffb841;">DONATE</a>
+    </nav>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 40px;overflow:hidden;">
+    <canvas ref="{{ terrainRef }}" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
+    <div style="position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 18%,rgba(0,0,0,0.78) 0%,rgba(0,0,0,0.35) 45%,rgba(0,0,0,0) 70%);pointer-events:none;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 50%,rgba(0,0,0,0.65) 100%);pointer-events:none;"></div>
+
+    <!-- corner telemetry -->
+    <div style="position:absolute;top:96px;left:40px;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:#5C5C63;">SYS // SWARM-RECON</div>
+    <div style="position:absolute;top:96px;right:40px;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:#5C5C63;text-align:right;">STATUS // FIELD TESTS ACTIVE</div>
+    <div style="position:absolute;bottom:34px;left:40px;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:#5C5C63;">LAT —— · LON —— · TERRAIN MAP LIVE</div>
+    <div style="position:absolute;bottom:34px;right:40px;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:#5C5C63;">SCROLL ↓</div>
+
+    <div style="position:relative;z-index:2;max-width:1180px;margin:0 auto;width:100%;">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.22em;color:#C9C9CF;margin-bottom:26px;">
+        <span style="width:7px;height:7px;border-radius:50%;background:#F5A524;display:inline-block;animation:orynBlink 1.8s ease-in-out infinite;"></span>
+        AUTONOMOUS SEARCH &amp; RESCUE · DRONE SWARMS
+      </div>
+      <h1 style="font-weight:800;font-size:clamp(44px,8vw,104px);line-height:0.96;letter-spacing:-0.02em;margin:0 0 28px;max-width:14ch;">Nobody left<br>in the dark.</h1>
+      <p style="font-size:clamp(17px,1.6vw,21px);line-height:1.55;color:#B9B9C0;max-width:60ch;margin:0 0 40px;">When disaster scatters people across broken terrain, the first hours decide who survives. Orynth Industries builds the world's first coordinated drone swarms for search and rescue — designed to find the displaced the moment after catastrophe, and map the disaster as it unfolds.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;">
+        <a href="#support" style="display:inline-flex;align-items:center;gap:10px;background:#F5A524;color:#000;font-weight:700;font-size:15px;padding:16px 30px;border-radius:2px;letter-spacing:0.02em;" style-hover="background:#ffb841;">Fund the mission →</a>
+        <a href="SneakPeek.dc.html" style="display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,0.28);color:#fff;font-weight:600;font-size:15px;padding:16px 28px;border-radius:2px;" style-hover="border-color:#fff;background:rgba(255,255,255,0.05);">See what's coming</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STAT / TENSION BAND ===== -->
+  <section id="mission" style="border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);background:#060607;">
+    <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);">
+      <div style="padding:46px 36px;border-right:1px solid rgba(255,255,255,0.08);">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#5C5C63;margin-bottom:14px;">THE FIRST HOUR</div>
+        <div style="font-weight:800;font-size:40px;line-height:1;margin-bottom:10px;">Decisive</div>
+        <p style="font-size:14.5px;line-height:1.55;color:#8E8E96;margin:0;">Survival odds fall sharply with every hour a person stays unfound. Speed is everything.</p>
+      </div>
+      <div style="padding:46px 36px;border-right:1px solid rgba(255,255,255,0.08);">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#5C5C63;margin-bottom:14px;">CONVENTIONAL SEARCH</div>
+        <div style="font-weight:800;font-size:40px;line-height:1;margin-bottom:10px;">Linear</div>
+        <p style="font-size:14.5px;line-height:1.55;color:#8E8E96;margin:0;">Ground teams move one grid at a time across terrain that disaster has made impassable.</p>
+      </div>
+      <div style="padding:46px 36px;">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#F5A524;margin-bottom:14px;">THE ORYNTH SWARM</div>
+        <div style="font-weight:800;font-size:40px;line-height:1;margin-bottom:10px;">Everywhere</div>
+        <p style="font-size:14.5px;line-height:1.55;color:#8E8E96;margin:0;">A swarm covers the whole disaster at once — searching, mapping, and surfacing signs of life in parallel.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROBLEM ===== -->
+  <section style="max-width:1180px;margin:0 auto;padding:120px 40px;">
+    <div style="display:grid;grid-template-columns:0.9fr 1.1fr;gap:64px;align-items:start;">
+      <div style="position:sticky;top:120px;">
+        <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.18em;color:#F5A524;margin-bottom:20px;">01 — THE PROBLEM</div>
+        <h2 style="font-weight:800;font-size:clamp(30px,3.6vw,48px);line-height:1.04;letter-spacing:-0.015em;margin:0;">Disaster displaces<br>people faster than<br>we can find them.</h2>
+      </div>
+      <div>
+        <p style="font-size:18px;line-height:1.65;color:#C2C2C9;margin:0 0 26px;">Earthquakes collapse cities in seconds. Floods erase whole districts overnight. Wildfires move faster than the people fleeing them. In the aftermath, survivors are scattered, injured, and invisible — across exactly the terrain that responders can no longer cross.</p>
+        <p style="font-size:18px;line-height:1.65;color:#C2C2C9;margin:0 0 26px;">Search today is a race run on foot. Crews are stretched thin, maps are out of date the moment the ground moves, and the area to cover is always larger than the time available. People who could have been saved are simply never reached in time.</p>
+        <p style="font-size:18px;line-height:1.65;color:#8E8E96;margin:0;border-left:2px solid #F5A524;padding-left:22px;">This is the gap Orynth was built to close — the distance between <span style="color:#F4F4F5;font-weight:600;">when disaster strikes</span> and <span style="color:#F4F4F5;font-weight:600;">when the lost are found.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== APPROACH / REVEAL TEASER ===== -->
+  <section id="reveal" style="border-top:1px solid rgba(255,255,255,0.08);background:#060607;">
+    <div style="max-width:1180px;margin:0 auto;padding:120px 40px;">
+      <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.18em;color:#F5A524;margin-bottom:22px;">02 — OUR APPROACH</div>
+      <h2 style="font-weight:800;font-size:clamp(30px,4vw,54px);line-height:1.05;letter-spacing:-0.015em;margin:0 0 56px;max-width:20ch;">A swarm that moves as one — and leaves no one unseen.</h2>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);">
+        <div style="background:#060607;padding:38px 32px;">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;color:#5C5C63;letter-spacing:0.14em;margin-bottom:18px;">A.</div>
+          <h3 style="font-weight:700;font-size:21px;margin:0 0 12px;">Cover everything, at once</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#8E8E96;margin:0;">Dozens of units fan out in coordination, sweeping collapsed and flooded ground far faster than any team on foot.</p>
+        </div>
+        <div style="background:#060607;padding:38px 32px;">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;color:#5C5C63;letter-spacing:0.14em;margin-bottom:18px;">B.</div>
+          <h3 style="font-weight:700;font-size:21px;margin:0 0 12px;">Map as it happens</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#8E8E96;margin:0;">The swarm builds a live picture of the disaster — so responders see the ground as it is now, not as it was.</p>
+        </div>
+        <div style="background:#060607;padding:38px 32px;">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;color:#5C5C63;letter-spacing:0.14em;margin-bottom:18px;">C.</div>
+          <h3 style="font-weight:700;font-size:21px;margin:0 0 12px;">Surface signs of life</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#8E8E96;margin:0;">Where people are scattered and unseen, the swarm points rescuers to the places that matter first.</p>
+        </div>
+      </div>
+
+      <!-- redacted reveal panel -->
+      <div style="margin-top:48px;position:relative;border:1px solid rgba(245,165,36,0.35);background:linear-gradient(180deg,rgba(245,165,36,0.06),rgba(245,165,36,0));padding:52px 44px;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#F5A524;margin-bottom:18px;">
+          <span style="width:7px;height:7px;border-radius:50%;background:#F5A524;display:inline-block;animation:orynBlink 1.8s ease-in-out infinite;"></span>
+          FIELD REVEAL PENDING
+        </div>
+        <h3 style="font-weight:800;font-size:clamp(24px,3vw,38px);line-height:1.1;margin:0 0 16px;max-width:24ch;">The full system has not been revealed.</h3>
+        <p style="font-size:16.5px;line-height:1.6;color:#B9B9C0;max-width:62ch;margin:0 0 14px;">We're holding the specifics close until our field tests are complete. What we can tell you today: it changes the first hour after a disaster — and the people who depend on it will never know its name, only that help arrived sooner than it should have been possible.</p>
+        <p style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.06em;color:#7A7A82;margin:0;">Can't wait? <a href="SneakPeek.dc.html" style="color:#F5A524;text-decoration:underline;text-underline-offset:3px;">Watch the sneak peek →</a> &nbsp;·&nbsp; <a href="#support" style="color:#F5A524;text-decoration:underline;text-underline-offset:3px;">Request the reveal ↓</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TRUST / TEAM ===== -->
+  <section style="max-width:1180px;margin:0 auto;padding:120px 40px;">
+    <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.18em;color:#F5A524;margin-bottom:22px;">03 — WHY ORYNTH</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;margin-bottom:60px;">
+      <h2 style="font-weight:800;font-size:clamp(30px,3.6vw,48px);line-height:1.05;letter-spacing:-0.015em;margin:0;">Built by people who<br>have run the search.</h2>
+      <p style="font-size:16.5px;line-height:1.6;color:#9A9AA2;margin:0;">Orynth pairs hard engineering with hard-won field experience. Our founding team carries backgrounds across defense robotics, autonomous systems, and front-line search-and-rescue — and we are putting the work in front of real conditions now.</p>
+    </div>
+
+    <!-- capability tags -->
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:56px;">
+      <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#C9C9CF;border:1px solid rgba(255,255,255,0.16);padding:9px 16px;border-radius:2px;">DEFENSE ROBOTICS</span>
+      <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#C9C9CF;border:1px solid rgba(255,255,255,0.16);padding:9px 16px;border-radius:2px;">AUTONOMOUS SWARMS</span>
+      <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#C9C9CF;border:1px solid rgba(255,255,255,0.16);padding:9px 16px;border-radius:2px;">SAR OPERATIONS</span>
+      <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#C9C9CF;border:1px solid rgba(255,255,255,0.16);padding:9px 16px;border-radius:2px;">DISASTER MAPPING</span>
+      <span style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#C9C9CF;border:1px solid rgba(255,255,255,0.16);padding:9px 16px;border-radius:2px;">REAL-TIME AUTONOMY</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+      <div style="border:1px solid rgba(255,255,255,0.10);background:#060607;">
+        <div style="aspect-ratio:4/5;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.05) 0 10px,transparent 10px 20px);display:flex;align-items:flex-end;padding:16px;border-bottom:1px solid rgba(255,255,255,0.08);">
+          <span style="font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.12em;color:#6A6A72;">[ founder photo ]</span>
+        </div>
+        <div style="padding:22px;">
+          <div style="font-weight:700;font-size:18px;">Founder &amp; CEO</div>
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#F5A524;margin:7px 0 12px;">AUTONOMY · STRATEGY</div>
+          <p style="font-size:13.5px;line-height:1.55;color:#8E8E96;margin:0;">Add a short bio. Background in autonomous systems and the conviction that nobody should be lost to a slow search.</p>
+        </div>
+      </div>
+      <div style="border:1px solid rgba(255,255,255,0.10);background:#060607;">
+        <div style="aspect-ratio:4/5;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.05) 0 10px,transparent 10px 20px);display:flex;align-items:flex-end;padding:16px;border-bottom:1px solid rgba(255,255,255,0.08);">
+          <span style="font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.12em;color:#6A6A72;">[ founder photo ]</span>
+        </div>
+        <div style="padding:22px;">
+          <div style="font-weight:700;font-size:18px;">Head of Robotics</div>
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#F5A524;margin:7px 0 12px;">DEFENSE ROBOTICS</div>
+          <p style="font-size:13.5px;line-height:1.55;color:#8E8E96;margin:0;">Add a short bio. Years building robust hardware for the hardest environments on earth.</p>
+        </div>
+      </div>
+      <div style="border:1px solid rgba(255,255,255,0.10);background:#060607;">
+        <div style="aspect-ratio:4/5;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.05) 0 10px,transparent 10px 20px);display:flex;align-items:flex-end;padding:16px;border-bottom:1px solid rgba(255,255,255,0.08);">
+          <span style="font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.12em;color:#6A6A72;">[ founder photo ]</span>
+        </div>
+        <div style="padding:22px;">
+          <div style="font-weight:700;font-size:18px;">SAR Lead</div>
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#F5A524;margin:7px 0 12px;">FIELD OPERATIONS</div>
+          <p style="font-size:13.5px;line-height:1.55;color:#8E8E96;margin:0;">Add a short bio. Has run real searches and knows exactly where minutes are won and lost.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:34px;display:flex;align-items:center;gap:14px;font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:0.08em;color:#9A9AA2;border-top:1px solid rgba(255,255,255,0.08);padding-top:26px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#F5A524;display:inline-block;animation:orynBlink 1.8s ease-in-out infinite;"></span>
+      FIELD TESTS UNDERWAY — 2026. <a href="About.dc.html" style="color:#F4F4F5;text-decoration:underline;text-underline-offset:3px;margin-left:6px;">Read the full story →</a>
+    </div>
+  </section>
+
+  <!-- ===== SUPPORT / DONATE / NOTIFY ===== -->
+  <section id="support" style="border-top:1px solid rgba(255,255,255,0.08);background:#000;position:relative;overflow:hidden;">
+    <div style="max-width:1180px;margin:0 auto;padding:120px 40px;">
+      <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.18em;color:#F5A524;margin-bottom:22px;">04 — STAND WITH US</div>
+      <div style="display:grid;grid-template-columns:1.05fr 0.95fr;gap:64px;align-items:start;">
+        <div>
+          <h2 style="font-weight:800;font-size:clamp(32px,4.4vw,60px);line-height:1.0;letter-spacing:-0.02em;margin:0 0 26px;">Your support is<br>someone's first hour.</h2>
+          <p style="font-size:18px;line-height:1.65;color:#B9B9C0;margin:0 0 22px;max-width:54ch;">Orynth is at the field-test stage — the moment where funding directly becomes capability. Every contribution puts this system in front of real disasters faster, and shortens the gap between catastrophe and discovery.</p>
+          <p style="font-size:16px;line-height:1.6;color:#8E8E96;margin:0 0 36px;max-width:54ch;">Donations support flight testing, hardware iteration, and the field deployments that prove a swarm can save a life. When you give, you are funding the search that reaches people in time.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;">
+            <a href="#" style="display:inline-flex;align-items:center;gap:10px;background:#F5A524;color:#000;font-weight:700;font-size:16px;padding:18px 34px;border-radius:2px;" style-hover="background:#ffb841;">Donate now →</a>
+            <a href="Contact.dc.html" style="display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,0.28);color:#fff;font-weight:600;font-size:16px;padding:18px 30px;border-radius:2px;" style-hover="border-color:#fff;background:rgba(255,255,255,0.05);">Talk to the team</a>
+          </div>
+          <p style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#5C5C63;margin:18px 0 0;">SECURE GIVING · 100% TOWARD THE MISSION</p>
+        </div>
+
+        <!-- notify card -->
+        <div style="border:1px solid rgba(255,255,255,0.12);background:#060607;padding:36px;">
+          <div style="display:flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#C9C9CF;margin-bottom:18px;">
+            <span style="width:7px;height:7px;border-radius:50%;background:#F5A524;display:inline-block;animation:orynBlink 1.8s ease-in-out infinite;"></span>
+            BE THERE AT THE REVEAL
+          </div>
+          <h3 style="font-weight:700;font-size:24px;line-height:1.15;margin:0 0 12px;">Get the first look.</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#8E8E96;margin:0 0 24px;">Join the list for the field reveal, milestone updates, and early ways to back the mission. No noise — only what matters.</p>
+
+          <sc-if value="{{ notified }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1px solid rgba(245,165,36,0.4);background:rgba(245,165,36,0.06);padding:22px;display:flex;align-items:center;gap:14px;">
+              <span style="width:10px;height:10px;border-radius:50%;background:#F5A524;display:inline-block;flex:none;"></span>
+              <div>
+                <div style="font-weight:700;font-size:15px;">You're on the list.</div>
+                <div style="font-size:13px;color:#8E8E96;margin-top:3px;">We'll reach you the moment there's something to show.</div>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ notNotified }}" hint-placeholder-val="{{ true }}">
+            <form onSubmit="{{ submitNotify }}" style="display:flex;flex-direction:column;gap:12px;">
+              <input type="email" required="required" placeholder="you@email.com" value="{{ email }}" onInput="{{ onEmail }}" style="width:100%;background:#000;border:1px solid rgba(255,255,255,0.18);color:#fff;font-family:'Space Mono',monospace;font-size:14px;padding:15px 16px;border-radius:2px;outline:none;" style-focus="border-color:#F5A524;"/>
+              <button type="submit" style="width:100%;background:#fff;color:#000;font-weight:700;font-size:15px;padding:15px;border:none;border-radius:2px;cursor:pointer;font-family:Archivo,sans-serif;" style-hover="background:#F5A524;">Notify me at the reveal →</button>
+            </form>
+            <p style="font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.04em;color:#5C5C63;margin:14px 0 0;">WE WILL NEVER SHARE YOUR ADDRESS.</p>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer style="border-top:1px solid rgba(255,255,255,0.10);background:#060607;">
+    <div style="max-width:1180px;margin:0 auto;padding:72px 40px 40px;">
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;align-items:start;">
+        <div>
+          <div style="display:flex;align-items:center;gap:11px;margin-bottom:20px;">
+            <svg viewBox="0 0 100 100" width="30" height="30" style="display:block;flex:none;">
+              <circle cx="50" cy="50" r="46" fill="none" stroke="#fff" stroke-width="4"/>
+              <circle cx="50" cy="50" r="29" fill="none" stroke="#fff" stroke-width="3"/>
+              <circle cx="50" cy="50" r="6.5" fill="#fff"/>
+              <line x1="50" y1="3" x2="50" y2="24" stroke="#fff" stroke-width="3"/>
+              <line x1="50" y1="76" x2="50" y2="97" stroke="#fff" stroke-width="3"/>
+              <line x1="3" y1="50" x2="24" y2="50" stroke="#fff" stroke-width="3"/>
+              <line x1="76" y1="50" x2="97" y2="50" stroke="#fff" stroke-width="3"/>
+            </svg>
+            <div style="line-height:1;">
+              <div style="font-weight:800;font-size:20px;letter-spacing:1.5px;">RYNTH</div>
+              <div style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:0.44em;color:#8A8A92;margin-top:3px;">INDUSTRIES</div>
+            </div>
+          </div>
+          <p style="font-size:15px;line-height:1.6;color:#8E8E96;max-width:34ch;margin:0;">First-in-the-world drone swarms for search and rescue. Nobody left in the dark.</p>
+        </div>
+        <div>
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#5C5C63;margin-bottom:18px;">EXPLORE</div>
+          <div style="display:flex;flex-direction:column;gap:12px;font-size:15px;color:#B7B7BE;">
+            <a href="#mission" style-hover="color:#fff;">Mission</a>
+            <a href="About.dc.html" style-hover="color:#fff;">About</a>
+            <a href="Contact.dc.html" style-hover="color:#fff;">Contact</a>
+            <a href="#support" style-hover="color:#fff;">Donate</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#5C5C63;margin-bottom:18px;">CONTACT</div>
+          <a href="mailto:info@orynthindustries.com" style="font-size:16px;font-weight:600;color:#F5A524;text-decoration:underline;text-underline-offset:3px;word-break:break-all;" style-hover="color:#ffb841;">info@orynthindustries.com</a>
+          <p style="font-size:13.5px;line-height:1.55;color:#8E8E96;margin:16px 0 0;">For partnerships, press, and giving inquiries.</p>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:56px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#5C5C63;">
+        <span>© 2026 ORYNTH INDUSTRIES</span>
+        <span>SAVING LIVES · MAPPING DISASTER · ON A MISSION</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = { email: '', notified: false };
+
+  componentDidMount() {
+    import('./terrain.js').then((m) => {
+      if (this.terrainRef && this.terrainRef.current) {
+        this._cleanup = m.initTerrain(this.terrainRef.current, { speed: 1 });
+      }
+    }).catch(() => {});
+  }
+  componentWillUnmount() { if (this._cleanup) this._cleanup(); }
+
+  renderVals() {
+    if (!this.terrainRef) this.terrainRef = React.createRef();
+    return {
+      terrainRef: this.terrainRef,
+      email: this.state.email,
+      notified: this.state.notified,
+      notNotified: !this.state.notified,
+      onEmail: (e) => this.setState({ email: e.target.value }),
+      submitNotify: (e) => { e.preventDefault(); this.setState({ notified: true }); },
+    };
+  }
+}
+</script>
+</body>
+</html>
